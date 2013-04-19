@@ -35,6 +35,7 @@ exports.testOf = function(test) {
     );
 };
 
+
 exports.testError = function(test) {
     var promise = Promise.error(41);
     promise.fork(
@@ -132,3 +133,32 @@ exports.testJoin = function(test) {
         }
     );
 };
+exports.testNodeCall = function(test) {
+   var node = require('./node');
+   var promise = node.call(fs.readFile,__filename, 'UTF-8');
+   promise.fork(
+         function(data) {
+            test.equal(true, data.indexOf("exports.testNode = function(test)") != -1);
+            test.done();
+         },
+         function(err) { 
+            test.ok(false, 'node.call was reject');
+            test.done();
+         }
+    );
+};
+exports.testNodeApply = function(test) {
+   var node = require('./node');
+   var promise = node.apply(fs.readFile, [__filename, 'UTF-8']);
+   promise.fork(
+         function(data) {
+            test.equal(true, data.indexOf("exports.testNode = function(test)") != -1);
+            test.done();
+         },
+         function(err) { 
+            test.ok(false, 'node.apply was reject');
+            test.done();
+         }
+    );
+};
+
