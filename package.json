@@ -1,6 +1,6 @@
 {
   "name": "fantasy-promises",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Fantasy Land compatible monadic promises",
   "main": "index.js",
   "scripts": {
