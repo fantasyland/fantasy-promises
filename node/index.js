@@ -18,7 +18,7 @@ var slice = [].slice;
 exports.apply = function apply(func, args) {
   return new Promise(function (resolve, reject) {
     var callback = function (err, data) {
-      if(err) return reject(error);
+      if(err) return reject(err);
       resolve(data);
     }
     func.apply(null, args.concat(callback));
