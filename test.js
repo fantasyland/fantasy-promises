@@ -49,19 +49,19 @@ exports.testJoin = function(test) {
 };
 
 exports.testNodeCall = function(test) {
-   var node = require('./node');
-   var promise = node.call(fs.readFile,__filename, 'UTF-8');
-   promise.fork(function(data) {
-       test.equal(true, data.indexOf("exports.testNode = function(test)") != -1);
-       test.done();
-   });
+    var node = require('./node');
+    var promise = node.call(fs.readFile,__filename, 'UTF-8');
+    promise.fork(function(data) {
+        test.equal(true, data.indexOf("exports.testNode = function(test)") != -1);
+        test.done();
+    });
 };
 
 exports.testNodeApply = function(test) {
-   var node = require('./node');
-   var promise = node.apply(fs.readFile, [__filename, 'UTF-8']);
-   promise.fork(function(data) {
-       test.equal(true, data.indexOf("exports.testNode = function(test)") != -1);
-       test.done();
-   });
+    var node = require('./node');
+    var promise = node.apply(fs.readFile, [__filename, 'UTF-8']);
+    promise.fork(function(data) {
+        test.equal(true, data.indexOf("exports.testNode = function(test)") != -1);
+        test.done();
+    });
 };
