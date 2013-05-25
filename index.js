@@ -8,16 +8,11 @@
     ## `Promise(fork)`
 
     Promise is a constructor which takes a `fork` function. The `fork`
-    function takes two arguments:
+    function takes one argument:
 
-        fork(resolve, reject)
+    ### `fork(resolve)`
 
-    Both `resolve` and `reject` are side-effecting callbacks.
-
-    ### `fork(resolve, reject)`
-
-    The `resolve` callback gets called on a "successful" value. The
-    `reject` callback gets called on a "failure" value.
+    The `resolve` callback gets called on a value.
 **/
 function Promise(fork) {
     this.fork = fork;
@@ -29,19 +24,8 @@ function Promise(fork) {
     Creates a Promise that contains a successful value.
 **/
 Promise.of = function(x) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve) {
         resolve(x);
-    });
-};
-
-/**
-    ### `Promise.error(x)`
-
-    Creates a Promise that contains a failure value.
-**/
-Promise.error = function(x) {
-    return new Promise(function(resolve, reject) {
-        reject(x);
     });
 };
 
@@ -53,24 +37,9 @@ Promise.error = function(x) {
 **/
 Promise.prototype.chain = function(f) {
     var promise = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve) {
         promise.fork(function(a) {
-            f(a).fork(resolve, reject);
-        }, reject);
-    });
-};
-
-/**
-    ### `reject(f)`
-
-    Returns a new promise that evaluates `f` when the current promise
-    fails. `f` must return a new promise.
-**/
-Promise.prototype.reject = function(f) {
-    var promise = this;
-    return new Promise(function(resolve, reject) {
-        promise.fork(resolve, function(a) {
-            f(a).fork(resolve, reject);
+            f(a).fork(resolve);
         });
     });
 };
@@ -83,10 +52,10 @@ Promise.prototype.reject = function(f) {
 **/
 Promise.prototype.map = function(f) {
     var promise = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve) {
         promise.fork(function(a) {
             resolve(f(a));
-        }, reject);
+        });
     });
 };
 
