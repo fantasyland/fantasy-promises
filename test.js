@@ -48,6 +48,21 @@ exports.testJoin = function(test) {
     });
 };
 
+exports.testCoof = function(test) {
+    var promise = Promise.of(41).map(function(x) { return x + 1; });
+    test.equal(42, promise.coof());
+    test.done();
+};
+
+exports.testCochain = function(test) {
+    var promise = Promise.of(41).cochain(function(p) {
+        return p.coof() + 1;
+    }).fork(function(data) {
+        test.equal(42, data);
+        test.done();
+    });
+};
+
 exports.testNodeCall = function(test) {
     var node = require('./node');
     var promise = node.call(fs.readFile,__filename, 'UTF-8');

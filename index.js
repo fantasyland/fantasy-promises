@@ -25,7 +25,7 @@ function Promise(fork) {
 **/
 Promise.of = function(x) {
     return new Promise(function(resolve) {
-        resolve(x);
+        return resolve(x);
     });
 };
 
@@ -38,8 +38,8 @@ Promise.of = function(x) {
 Promise.prototype.chain = function(f) {
     var promise = this;
     return new Promise(function(resolve) {
-        promise.fork(function(a) {
-            f(a).fork(resolve);
+        return promise.fork(function(a) {
+            return f(a).fork(resolve);
         });
     });
 };
@@ -53,9 +53,33 @@ Promise.prototype.chain = function(f) {
 Promise.prototype.map = function(f) {
     var promise = this;
     return new Promise(function(resolve) {
-        promise.fork(function(a) {
-            resolve(f(a));
+        return promise.fork(function(a) {
+            return resolve(f(a));
         });
+    });
+};
+
+/**
+   ### `coof()`
+
+   Executes a promise to get a value.
+**/
+Promise.prototype.coof = function() {
+    return this.fork(function(data) {
+        return data;
+    });
+};
+
+/**
+   ### `cochain(f)`
+
+   Returns a new promise that evaluates `f` over the promise to get a
+   value.
+**/
+Promise.prototype.cochain = function(f) {
+    var promise = this;
+    return new Promise(function(resolve) {
+        return resolve(f(promise));
     });
 };
 
