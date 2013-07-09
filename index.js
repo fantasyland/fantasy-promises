@@ -60,30 +60,28 @@ Promise.prototype.map = function(f) {
 };
 
 /**
-   ### `coof()`
+   ### `extract()`
 
    Executes a promise to get a value.
 **/
-Promise.prototype.coof = function() {
+Promise.prototype.extract = function() {
     return this.fork(function(data) {
         return data;
     });
 };
 
 /**
-   ### `cochain(f)`
+   ### `extend(f)`
 
    Returns a new promise that evaluates `f` over the promise to get a
    value.
 **/
-Promise.prototype.cochain = function(f) {
+Promise.prototype.extend = function(f) {
     var promise = this;
-    return new Promise(function(resolve) {
-        return resolve(f(promise));
+    return promise.map(function(a) {
+        return f(Promise.of(a));
     });
 };
-
-module.exports = Promise;
 
 /**
     ## Fantasy Land Compatible
@@ -92,3 +90,5 @@ module.exports = Promise;
       ![](https://raw.github.com/pufuwozu/fantasy-land/master/logo.png)
     ](https://github.com/pufuwozu/fantasy-land)
 **/
+
+module.exports = Promise;

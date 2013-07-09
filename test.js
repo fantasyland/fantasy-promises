@@ -24,7 +24,7 @@ exports.testOf = function(test) {
 };
 
 
-exports.testChainOf = function(test) {
+exports.testChain = function(test) {
     var promise = Promise.of(41).chain(function(a) { return Promise.of(a + 1); });
     promise.fork(function(data) {
         test.equal(42, data);
@@ -48,35 +48,21 @@ exports.testJoin = function(test) {
     });
 };
 
-exports.testCoof = function(test) {
+exports.testExtract = function(test) {
     var promise = Promise.of(41).map(function(x) { return x + 1; });
-    test.equal(42, promise.coof());
+    test.equal(42, promise.extract());
     test.done();
 };
 
-exports.testCochain = function(test) {
-    var promise = Promise.of(41).cochain(function(p) {
-        return p.coof() + 1;
+exports.testExtend = function(test) {
+    var promise = new Promise(function(resolve) {
+        setTimeout(function() {
+            resolve("100 ms");
+        }, 100);
+    }).extend(function(p) {
+        return p.extract().toUpperCase();
     }).fork(function(data) {
-        test.equal(42, data);
-        test.done();
-    });
-};
-
-exports.testNodeCall = function(test) {
-    var node = require('./node');
-    var promise = node.call(fs.readFile,__filename, 'UTF-8');
-    promise.fork(function(data) {
-        test.equal(true, data.indexOf("exports.testNode = function(test)") != -1);
-        test.done();
-    });
-};
-
-exports.testNodeApply = function(test) {
-    var node = require('./node');
-    var promise = node.apply(fs.readFile, [__filename, 'UTF-8']);
-    promise.fork(function(data) {
-        test.equal(true, data.indexOf("exports.testNode = function(test)") != -1);
+        test.equal("100 MS", data);
         test.done();
     });
 };
