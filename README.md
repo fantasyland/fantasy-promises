@@ -5,39 +5,34 @@ This library implements purely functional, monadic promises.
 ## `Promise(fork)`
 
 Promise is a constructor which takes a `fork` function. The `fork`
-function takes two arguments:
+function takes one argument:
 
-    fork(resolve, reject)
+### `fork(resolve)`
 
-Both `resolve` and `reject` are side-effecting callbacks.
-
-### `fork(resolve, reject)`
-
-The `resolve` callback gets called on a "successful" value. The
-`reject` callback gets called on a "failure" value.
+The `resolve` callback gets called on a value.
 
 ### `Promise.of(x)`
 
 Creates a Promise that contains a successful value.
-
-### `Promise.error(x)`
-
-Creates a Promise that contains a failure value.
 
 ### `chain(f)`
 
 Returns a new promise that evaluates `f` when the current promise
 is successfully fulfilled. `f` must return a new promise.
 
-### `reject(f)`
-
-Returns a new promise that evaluates `f` when the current promise
-fails. `f` must return a new promise.
-
 ### `map(f)`
 
 Returns a new promise that evaluates `f` on a value and passes it
 through to the resolve function.
+
+### `extract()`
+
+Executes a promise to get a value.
+
+### `extend(f)`
+
+Returns a new promise that evaluates `f` over the promise to get a
+value.
 
 ## Fantasy Land Compatible
 

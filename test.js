@@ -9,156 +9,60 @@ exports.testReadFile = function(test) {
         });
     });
 
-    promise.fork(
-        function(data) {
-            test.ok(true);
-            test.done();
-        },
-        function(error) {
-            test.ok(false, 'readFile called reject');
-            test.done();
-        }
-    );
+    promise.fork(function(data) {
+        test.ok(true);
+        test.done();
+    });
 };
 
 exports.testOf = function(test) {
     var promise = Promise.of(41);
-    promise.fork(
-        function(data) {
-            test.equal(41, data);
-            test.done();
-        },
-        function(error) {
-            test.ok(false, 'Promise.of called reject');
-            test.done();
-        }
-    );
+    promise.fork(function(data) {
+        test.equal(41, data);
+        test.done();
+    });
 };
 
 
-exports.testError = function(test) {
-    var promise = Promise.error(41);
-    promise.fork(
-        function(data) {
-            test.ok(false, 'Promise.error called resolve');
-            test.done();
-        },
-        function(error) {
-            test.equal(41, error);
-            test.done();
-        }
-    );
-};
-
-exports.testChainOf = function(test) {
+exports.testChain = function(test) {
     var promise = Promise.of(41).chain(function(a) { return Promise.of(a + 1); });
-    promise.fork(
-        function(data) {
-            test.equal(42, data);
-            test.done();
-        },
-        function(error) {
-            test.ok(false, 'chain with of called reject');
-            test.done();
-        }
-    );
-};
-
-exports.testChainError = function(test) {
-    var promise = Promise.of(41).chain(function(a) { return Promise.error(a + 1); });
-    promise.fork(
-        function(data) {
-            test.ok(false, 'chain with error called resolve');
-            test.done();
-        },
-        function(error) {
-            test.equal(42, error);
-            test.done();
-        }
-    );
-};
-
-exports.testRejectError = function(test) {
-    var promise = Promise.error(41).reject(function(a) { return Promise.error(a + 1); });
-    promise.fork(
-        function(data) {
-            test.ok(false, 'reject with error called resolve');
-            test.done();
-        },
-        function(error) {
-            test.equal(42, error);
-            test.done();
-        }
-    );
-};
-
-exports.testRejectOf = function(test) {
-    var promise = Promise.error(41).reject(function(a) { return Promise.of(a + 1); });
-    promise.fork(
-        function(data) {
-            test.equal(42, data);
-            test.done();
-        },
-        function(error) {
-            test.ok(false, 'reject with of called reject');
-            test.done();
-        }
-    );
+    promise.fork(function(data) {
+        test.equal(42, data);
+        test.done();
+    });
 };
 
 exports.testMap = function(test) {
     var promise = Promise.of(41).map(function(a) { return a + 1; });
-    promise.fork(
-        function(data) {
-            test.equal(42, data);
-            test.done();
-        },
-        function(error) {
-            test.ok(false, 'chain called reject');
-            test.done();
-        }
-    );
+    promise.fork(function(data) {
+        test.equal(42, data);
+        test.done();
+    });
 };
 
 exports.testJoin = function(test) {
     var promise = Promise.of(Promise.of(42)).chain(function(a) { return a; });
-    promise.fork(
-        function(data) {
-            test.equal(42, data);
-            test.done();
-        },
-        function(error) {
-            test.ok(false, 'chain called reject');
-            test.done();
-        }
-    );
-};
-exports.testNodeCall = function(test) {
-   var node = require('./node');
-   var promise = node.call(fs.readFile,__filename, 'UTF-8');
-   promise.fork(
-         function(data) {
-            test.equal(true, data.indexOf("exports.testNode = function(test)") != -1);
-            test.done();
-         },
-         function(err) { 
-            test.ok(false, 'node.call was reject');
-            test.done();
-         }
-    );
-};
-exports.testNodeApply = function(test) {
-   var node = require('./node');
-   var promise = node.apply(fs.readFile, [__filename, 'UTF-8']);
-   promise.fork(
-         function(data) {
-            test.equal(true, data.indexOf("exports.testNode = function(test)") != -1);
-            test.done();
-         },
-         function(err) { 
-            test.ok(false, 'node.apply was reject');
-            test.done();
-         }
-    );
+    promise.fork(function(data) {
+        test.equal(42, data);
+        test.done();
+    });
 };
 
+exports.testExtract = function(test) {
+    var promise = Promise.of(41).map(function(x) { return x + 1; });
+    test.equal(42, promise.extract());
+    test.done();
+};
+
+exports.testExtend = function(test) {
+    var promise = new Promise(function(resolve) {
+        setTimeout(function() {
+            resolve("100 ms");
+        }, 100);
+    }).extend(function(p) {
+        return p.extract().toUpperCase();
+    }).fork(function(data) {
+        test.equal("100 MS", data);
+        test.done();
+    });
+};
