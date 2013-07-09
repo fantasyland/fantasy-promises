@@ -4,7 +4,8 @@
   "description": "Fantasy Land compatible monadic promises",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/nodeunit test.js"
+    "readme": "$(npm bin)/emu < index.js > README.md",
+    "test": "$(npm bin)/nodeunit test.js"
   },
   "repository": {
     "type": "git",
