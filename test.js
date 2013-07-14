@@ -2,9 +2,8 @@ var Promise = require('./index'),
     fs = require('fs');
 
 exports.testReadFile = function(test) {
-    var promise = new Promise(function(resolve, reject) {
+    var promise = new Promise(function(resolve) {
         fs.readFile(__filename, 'utf8', function(error, data) {
-            if(error) return reject(error);
             resolve(data);
         });
     });
