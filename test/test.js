@@ -1,4 +1,4 @@
-var Promise = require('./index'),
+var Promise = require('../fantasy-promises'),
     fs = require('fs');
 
 exports.testReadFile = function(test) {
