@@ -1,5 +1,70 @@
-var Promise = require('../fantasy-promises'),
-    fs = require('fs');
+var λ = require('fantasy-check/src/adapters/nodeunit'),
+    combinators = require('fantasy-combinators'),
+    Promise = require('../fantasy-promises'),
+    fs = require('fs'),
+
+    identity = combinators.identity;
+
+exports.promise = {
+    'when testing of should return correct value': λ.check(
+        function(a) {
+            var promise = Promise.of(a);
+            return promise.fork(identity) === a;
+        },
+        [λ.AnyVal]
+    ),
+    'when testing chain should return correct value': λ.check(
+        function(a) {
+            var promise = Promise.of(a).chain(
+                function(x) {
+                    return Promise.of(x + 1);
+                }
+            );
+            return promise.fork(identity) === a + 1;
+        },
+        [Number]
+    ),
+    'when testing map should return correct value': λ.check(
+        function(a) {
+            var promise = Promise.of(a).map(
+                function(x) {
+                    return x + 1;
+                }
+            );
+            return promise.fork(identity) === a + 1;
+        },
+        [Number]
+    ),
+    'when testing nested promises with chain should return correct value': λ.check(
+        function(a) {
+            var promise = Promise.of(Promise.of(a)).chain(identity);
+            return promise.fork(identity) === a;
+        },
+        [λ.AnyVal]
+    ),
+    'when testing extract should return correct value': λ.check(
+        function(a) {
+            var promise = Promise.of(a).map(
+                function(x) {
+                    return x + 1;
+                }
+            );
+            return promise.extract() === a + 1;
+        },
+        [Number]
+    ),
+    'when testing extend should return correct value': λ.check(
+        function(a) {
+            var promise = Promise.of(a).extend(
+                function(x) {
+                    return x.extract().toUpperCase();
+                }
+            );
+            return promise.extract() === a.toUpperCase();
+        },
+        [String]
+    )
+};
 
 exports.testReadFile = function(test) {
     var promise = new Promise(function(resolve) {
@@ -12,45 +77,6 @@ exports.testReadFile = function(test) {
         test.ok(true);
         test.done();
     });
-};
-
-exports.testOf = function(test) {
-    var promise = Promise.of(41);
-    promise.fork(function(data) {
-        test.equal(41, data);
-        test.done();
-    });
-};
-
-
-exports.testChain = function(test) {
-    var promise = Promise.of(41).chain(function(a) { return Promise.of(a + 1); });
-    promise.fork(function(data) {
-        test.equal(42, data);
-        test.done();
-    });
-};
-
-exports.testMap = function(test) {
-    var promise = Promise.of(41).map(function(a) { return a + 1; });
-    promise.fork(function(data) {
-        test.equal(42, data);
-        test.done();
-    });
-};
-
-exports.testJoin = function(test) {
-    var promise = Promise.of(Promise.of(42)).chain(function(a) { return a; });
-    promise.fork(function(data) {
-        test.equal(42, data);
-        test.done();
-    });
-};
-
-exports.testExtract = function(test) {
-    var promise = Promise.of(41).map(function(x) { return x + 1; });
-    test.equal(42, promise.extract());
-    test.done();
 };
 
 exports.testExtend = function(test) {
