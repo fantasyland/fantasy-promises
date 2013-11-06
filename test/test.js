@@ -1,9 +1,13 @@
 var λ = require('fantasy-check/src/adapters/nodeunit'),
     combinators = require('fantasy-combinators'),
+    IO = require('fantasy-io'),
     Promise = require('../fantasy-promises'),
+
     fs = require('fs'),
 
-    identity = combinators.identity;
+    identity = combinators.identity,
+    compose = combinators.compose,
+    constant = combinators.constant;
 
 exports.promise = {
     'when testing of should return correct value': λ.check(
@@ -64,6 +68,25 @@ exports.promise = {
         },
         [String]
     )
+};
+
+exports.promiseT = {
+    'testing': function(test) {
+        var inc = function(x) {
+            return ++x;
+        };
+        var M = Promise.PromiseT(IO),
+
+            program =
+                M.of(42)
+                .map(inc)
+                .map(inc);
+
+        program.fork(function(a) {
+            test.ok(a.unsafePerform() === 44);
+            test.done();
+        });
+    }
 };
 
 exports.testReadFile = function(test) {

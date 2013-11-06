@@ -1,3 +1,4 @@
+var daggy = require('daggy');
 /**
     # Fantasy Promises
 
@@ -14,9 +15,7 @@
 
     The `resolve` callback gets called on a value.
 **/
-function Promise(fork) {
-    this.fork = fork;
-}
+var Promise = daggy.tagged('fork');
 
 /**
     ### `Promise.of(x)`
@@ -83,12 +82,31 @@ Promise.prototype.extend = function(f) {
     });
 };
 
-/**
-    ## Fantasy Land Compatible
+// Transformer
+Promise.PromiseT = function(M) {
+    var PromiseT = daggy.tagged('run');
+    PromiseT.of = function(x) {
+        return PromiseT(function(resolve) {
+            resolve(M.of(x));
+        });
+    };
+    PromiseT.prototype.chain = function(f) {
+        var promise = this;
+        return PromiseT(function(resolve) {
+            promise.run(function(result) {
+                resolve(result.map(f));
+            });
+        });
+    };
+    PromiseT.prototype.fork = function(f) {
+        return this.run(f);
+    };
+    PromiseT.prototype.map = function(f) {
+        return this.chain(function(a) {
+            return f(a);
+        });
+    };
+    return PromiseT;
+};
 
-    [
-      ![](https://raw.github.com/pufuwozu/fantasy-land/master/logo.png)
-    ](https://github.com/pufuwozu/fantasy-land)
-**/
-
-module.exports = Promise;
+exports = module.exports = Promise;
