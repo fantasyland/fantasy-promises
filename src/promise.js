@@ -82,31 +82,4 @@ Promise.prototype.extend = function(f) {
     });
 };
 
-// Transformer
-Promise.PromiseT = function(M) {
-    var PromiseT = daggy.tagged('run');
-    PromiseT.of = function(x) {
-        return PromiseT(function(resolve) {
-            resolve(M.of(x));
-        });
-    };
-    PromiseT.prototype.chain = function(f) {
-        var promise = this;
-        return PromiseT(function(resolve) {
-            promise.run(function(result) {
-                resolve(result.map(f));
-            });
-        });
-    };
-    PromiseT.prototype.fork = function(f) {
-        return this.run(f);
-    };
-    PromiseT.prototype.map = function(f) {
-        return this.chain(function(a) {
-            return f(a);
-        });
-    };
-    return PromiseT;
-};
-
 exports = module.exports = Promise;
