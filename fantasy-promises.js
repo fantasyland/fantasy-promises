@@ -1,3 +1,4 @@
-var promise = require('./src/promise');
+var Promise = require('./src/promise');
 
-exports = module.exports = promise;
+if (typeof module != 'undefined')
+    module.exports = Promise;

@@ -82,4 +82,6 @@ Promise.prototype.extend = function(f) {
     });
 };
 
-exports = module.exports = Promise;
+// Export
+if (typeof module != 'undefined')
+    module.exports = Promise;
