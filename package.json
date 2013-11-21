@@ -1,15 +1,9 @@
 {
   "name": "fantasy-promises",
-  "version": "0.1.0",
-  "description": "Fantasy Land compatible monadic promises",
-  "main": "index.js",
-  "scripts": {
-    "readme": "$(npm bin)/emu < index.js > README.md",
-    "test": "$(npm bin)/nodeunit test.js"
-  },
+  "description": "Fantasy Land compatible monadic promises.",
   "repository": {
     "type": "git",
-    "url": "git://github.com/pufuwozu/fantasy-promises.git"
+    "url": "https://github.com/fantasyland/fantasy-promises.git"
   },
   "keywords": [
     "promise",
@@ -22,8 +16,27 @@
   ],
   "author": "Brian McKenna",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fantasyland/fantasy-promises/issues"
+  },
+  "dependencies": {
+  },
   "devDependencies": {
-    "emu": "0.0.2",
-    "nodeunit": "~0.8.0"
-  }
+    "grunt-cli": "0.1.9",
+    "grunt": "0.4.x",
+    "grunt-contrib-jshint": "0.6.x",
+    "grunt-contrib-nodeunit": "0.2.0",
+    "fantasy-check": "0.0.8",
+    "fantasy-helpers": "0.0.x",
+    "daggy": "0.0.x",
+    "fantasy-combinators": "0.0.x",
+    "fantasy-io": "0.0.x"
+  },
+  "scripts": {
+      "readme": "$(npm bin)/emu < src/promise.js > README.md",
+      "test": "grunt"
+  },
+  "files": ["fantasy-promises.js", "src/*.js"],
+  "main": "fantasy-promises.js",
+  "version": "0.1.1"
 }
