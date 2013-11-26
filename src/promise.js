@@ -23,7 +23,7 @@ var Promise = daggy.tagged('fork');
     Creates a Promise that contains a successful value.
 **/
 Promise.of = function(x) {
-    return new Promise(function(resolve) {
+    return Promise(function(resolve) {
         return resolve(x);
     });
 };
@@ -36,7 +36,7 @@ Promise.of = function(x) {
 **/
 Promise.prototype.chain = function(f) {
     var promise = this;
-    return new Promise(function(resolve) {
+    return Promise(function(resolve) {
         return promise.fork(function(a) {
             return f(a).fork(resolve);
         });
@@ -51,7 +51,7 @@ Promise.prototype.chain = function(f) {
 **/
 Promise.prototype.map = function(f) {
     var promise = this;
-    return new Promise(function(resolve) {
+    return Promise(function(resolve) {
         return promise.fork(function(a) {
             return resolve(f(a));
         });

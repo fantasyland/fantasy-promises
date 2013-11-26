@@ -27,10 +27,10 @@
     "grunt": "0.4.x",
     "grunt-contrib-jshint": "0.6.x",
     "grunt-contrib-nodeunit": "0.2.0",
-    "fantasy-check": "0.0.8",
+    "fantasy-check": "0.1.6",
     "fantasy-helpers": "0.0.x",
     "fantasy-combinators": "0.0.x",
-    "fantasy-io": "0.0.x"
+    "fantasy-identities": "0.x.x"
   },
   "scripts": {
       "readme": "$(npm bin)/emu < src/promise.js > README.md",
@@ -38,5 +38,5 @@
   },
   "files": ["fantasy-promises.js", "src/*.js"],
   "main": "fantasy-promises.js",
-  "version": "0.1.1"
+  "version": "0.1.2"
 }
