@@ -1,4 +1,5 @@
 var λ = require('fantasy-check/src/adapters/nodeunit'),
+    applicative = require('fantasy-check/src/laws/applicative'),
     functor = require('fantasy-check/src/laws/functor'),
     monad = require('fantasy-check/src/laws/monad'),
     
@@ -13,6 +14,13 @@ function run(a) {
 }
 
 exports.promise = {
+
+    // Applicative Functor tests
+    'All (Applicative)': applicative.laws(λ)(Promise, run),
+    'Identity (Applicative)': applicative.identity(λ)(Promise, run),
+    'Composition (Applicative)': applicative.composition(λ)(Promise, run),
+    'Homomorphism (Applicative)': applicative.homomorphism(λ)(Promise, run),
+    'Interchange (Applicative)': applicative.interchange(λ)(Promise, run),
 
     // Functor tests
     'All (Functor)': functor.laws(λ)(Promise.of, run),

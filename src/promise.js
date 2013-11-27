@@ -29,6 +29,21 @@ Promise.of = function(x) {
 };
 
 /**
+    ### `ap(x)`
+
+    Returns a new promise that evaluates `f` on a value and passes it
+    through to the resolve function.
+**/
+Promise.prototype.ap = function(a) {
+    var promise = this;
+    return Promise(function(resolve) {
+        return promise.fork(function(f) {
+            return a.map(f).fork(resolve);
+        });
+    });
+};
+
+/**
     ### `chain(f)`
 
     Returns a new promise that evaluates `f` when the current promise
