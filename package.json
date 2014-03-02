@@ -20,6 +20,7 @@
     "url": "https://github.com/fantasyland/fantasy-promises/issues"
   },
   "dependencies": {
+    "daggy": "0.0.x"
   },
   "devDependencies": {
     "grunt-cli": "0.1.9",
@@ -28,7 +29,6 @@
     "grunt-contrib-nodeunit": "0.2.0",
     "fantasy-check": "0.0.8",
     "fantasy-helpers": "0.0.x",
-    "daggy": "0.0.x",
     "fantasy-combinators": "0.0.x",
     "fantasy-io": "0.0.x"
   },
