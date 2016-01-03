@@ -1,13 +1,11 @@
-var λ = require('fantasy-check/src/adapters/nodeunit'),
-    applicative = require('fantasy-check/src/laws/applicative'),
-    functor = require('fantasy-check/src/laws/functor'),
-    monad = require('fantasy-check/src/laws/monad'),
+const λ = require('fantasy-check/src/adapters/nodeunit');
+const applicative = require('fantasy-check/src/laws/applicative');
+const functor = require('fantasy-check/src/laws/functor');
+const monad = require('fantasy-check/src/laws/monad');
     
-    combinators = require('fantasy-combinators'),
-    Identity = require('fantasy-identities'),
-    Promise = require('../fantasy-promises'),
-
-    identity = combinators.identity;
+const {identity} = require('fantasy-combinators');
+const Identity = require('fantasy-identities');
+const Promise = require('../fantasy-promises');
 
 function run(a) {
     return Identity.of(a.fork(identity));
@@ -35,12 +33,8 @@ exports.promise = {
 
     // Manual tests
     'when testing extend should return correct value': λ.check(
-        function(a) {
-            var promise = Promise.of(a).extend(
-                function(x) {
-                    return x.extract().toUpperCase();
-                }
-            );
+        (a) => {
+            const promise = Promise.of(a).extend((x) => x.extract().toUpperCase());
             return promise.extract() === a.toUpperCase();
         },
         [String]

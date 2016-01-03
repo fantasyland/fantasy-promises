@@ -1,4 +1,5 @@
-var daggy = require('daggy');
+const daggy = require('daggy');
+const {identity} = require('fantasy-combinators');
 /**
     # Fantasy Promises
 
@@ -15,7 +16,7 @@ var daggy = require('daggy');
 
     The `resolve` callback gets called on a value.
 **/
-var Promise = daggy.tagged('fork');
+const Promise = daggy.tagged('fork');
 
 /**
     ### `Promise.of(x)`
@@ -23,9 +24,7 @@ var Promise = daggy.tagged('fork');
     Creates a Promise that contains a successful value.
 **/
 Promise.of = function(x) {
-    return Promise(function(resolve) {
-        return resolve(x);
-    });
+    return Promise((resolve) => resolve(x));
 };
 
 /**
@@ -35,11 +34,8 @@ Promise.of = function(x) {
     through to the resolve function.
 **/
 Promise.prototype.ap = function(a) {
-    var promise = this;
-    return Promise(function(resolve) {
-        return promise.fork(function(f) {
-            return a.map(f).fork(resolve);
-        });
+    return Promise((resolve) => {
+        return this.fork((f) => a.map(f).fork(resolve));
     });
 };
 
@@ -50,11 +46,8 @@ Promise.prototype.ap = function(a) {
     is successfully fulfilled. `f` must return a new promise.
 **/
 Promise.prototype.chain = function(f) {
-    var promise = this;
-    return Promise(function(resolve) {
-        return promise.fork(function(a) {
-            return f(a).fork(resolve);
-        });
+    return Promise((resolve) => {
+        return this.fork((a) => f(a).fork(resolve));
     });
 };
 
@@ -65,11 +58,8 @@ Promise.prototype.chain = function(f) {
     through to the resolve function.
 **/
 Promise.prototype.map = function(f) {
-    var promise = this;
-    return Promise(function(resolve) {
-        return promise.fork(function(a) {
-            return resolve(f(a));
-        });
+    return Promise((resolve) => {
+        return this.fork((a) => resolve(f(a)));
     });
 };
 
@@ -79,9 +69,7 @@ Promise.prototype.map = function(f) {
    Executes a promise to get a value.
 **/
 Promise.prototype.extract = function() {
-    return this.fork(function(data) {
-        return data;
-    });
+    return this.fork(identity);
 };
 
 /**
@@ -91,10 +79,7 @@ Promise.prototype.extract = function() {
    value.
 **/
 Promise.prototype.extend = function(f) {
-    var promise = this;
-    return promise.map(function(a) {
-        return f(Promise.of(a));
-    });
+    return this.map((a) => f(Promise.of(a)));
 };
 
 // Export
