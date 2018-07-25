@@ -1,0 +1,42 @@
+{
+  "name": "fantasy-promises",
+  "description": "Fantasy Land compatible monadic promises.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fantasyland/fantasy-promises.git"
+  },
+  "keywords": [
+    "promise",
+    "promises",
+    "fantasyland",
+    "monad",
+    "async",
+    "asynchronous",
+    "deferred"
+  ],
+  "author": "Brian McKenna",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fantasyland/fantasy-promises/issues"
+  },
+  "dependencies": {
+    "daggy": "0.0.x",
+    "fantasy-combinators": "0.0.x"
+  },
+  "devDependencies": {
+    "grunt-cli": "0.1.9",
+    "grunt": "0.4.x",
+    "grunt-contrib-jshint": "0.11.x",
+    "grunt-contrib-nodeunit": "0.4.x",
+    "fantasy-check": "0.1.6",
+    "fantasy-helpers": "0.0.x",
+    "fantasy-identities": "0.x.x"
+  },
+  "scripts": {
+      "readme": "$(npm bin)/emu < src/promise.js > README.md",
+      "test": "node --harmony_destructuring node_modules/.bin/nodeunit test/*.js"
+  },
+  "files": ["fantasy-promises.js", "src/*.js"],
+  "main": "fantasy-promises.js",
+  "version": "0.1.2"
+}
